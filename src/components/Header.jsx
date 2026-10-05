@@ -9,6 +9,8 @@ import {
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 import { setCookie, deleteCookie } from "cookies-next";
 
+// Keeps the __session cookie aligned with the Firebase ID token and reloads
+// the page when a different user signs in or out.
 function useUserSession(initialUser) {
   useEffect(() => {
     return onIdTokenChanged(async (user) => {
@@ -29,6 +31,7 @@ function useUserSession(initialUser) {
 }
 
 
+// Top bar with the logo, Google sign-in, and the signed-in profile menu.
 export default function Header({ initialUser }) {
   const user = useUserSession(initialUser);
 

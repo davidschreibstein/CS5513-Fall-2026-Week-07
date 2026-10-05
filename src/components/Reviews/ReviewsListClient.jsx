@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { getReviewsSnapshotByRestaurantId } from "@/src/lib/firebase/firestore.js";
 import { Review } from "@/src/components/Reviews/Review";
 
+// Shows the restaurant's reviews and replaces them when Firestore sends an update.
 export default function ReviewsListClient({
   initialReviews,
   restaurantId,

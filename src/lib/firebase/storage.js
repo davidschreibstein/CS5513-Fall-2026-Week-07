@@ -4,6 +4,7 @@ import { storage } from "@/src/lib/firebase/clientApp";
 
 import { updateRestaurantImageReference } from "@/src/lib/firebase/firestore";
 
+// Uploads a new restaurant photo and stores its public URL on the restaurant document.
 export async function updateRestaurantImage(restaurantId, image) {
     try {
       if (!restaurantId) {
@@ -23,6 +24,7 @@ export async function updateRestaurantImage(restaurantId, image) {
     }
   }
   
+  // Saves the file under images/{restaurantId}/ and returns a download URL.
   async function uploadImage(restaurantId, image) {
     const filePath = `images/${restaurantId}/${image.name}`;
     const newImageRef = ref(storage, filePath);

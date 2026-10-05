@@ -1,7 +1,9 @@
+// Inclusive random integer, used when generating sample restaurants and reviews.
 export function randomNumberBetween(min = 0, max = 1000) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// Returns a date 20–80 days before the starting date.
 export function getRandomDateBefore(startingDate = new Date()) {
   const randomNumberOfDays = randomNumberBetween(20, 80);
   const randomDate = new Date(
@@ -10,6 +12,7 @@ export function getRandomDateBefore(startingDate = new Date()) {
   return randomDate;
 }
 
+// Returns a date 1–19 days after the starting date.
 export function getRandomDateAfter(startingDate = new Date()) {
   const randomNumberOfDays = randomNumberBetween(1, 19);
   const randomDate = new Date(
