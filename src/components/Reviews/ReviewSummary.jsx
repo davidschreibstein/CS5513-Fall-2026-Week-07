@@ -1,4 +1,4 @@
-import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
+import { googleAI } from "@genkit-ai/google-genai";
 import { genkit } from "genkit";
 import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
@@ -29,10 +29,10 @@ export async function GeminiSummary({ restaurantId }) {
       );
     }
 
-    // Configure a Genkit instance.
+    // gemini-2.0-flash was shut down on June 1, 2026.
     const ai = genkit({
       plugins: [googleAI()],
-      model: gemini20Flash, // set default model
+      model: googleAI.model("gemini-3.5-flash"),
     });
     const { text } = await ai.generate(prompt);
 
