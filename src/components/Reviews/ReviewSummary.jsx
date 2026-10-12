@@ -4,6 +4,7 @@ import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
 import { getFirestore } from "firebase/firestore";
 
+// Server component that turns this restaurant's reviews into one sentence.
 export async function GeminiSummary({ restaurantId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const reviews = await getReviewsByRestaurantId(
@@ -12,6 +13,7 @@ export async function GeminiSummary({ restaurantId }) {
   );
 
   const reviewSeparator = "@";
+  // The separator keeps each review distinct inside a single prompt.
   const prompt = `
     Based on the following restaurant reviews, 
     where each review is separated by a '${reviewSeparator}' character, 
@@ -48,7 +50,7 @@ export async function GeminiSummary({ restaurantId }) {
   }
 }
 
-
+// Placeholder shown while the summary request is still running.
 export function GeminiSummarySkeleton() {
   return (
     <div className="restaurant__review_summary">

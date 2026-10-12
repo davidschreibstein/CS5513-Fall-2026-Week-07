@@ -34,6 +34,7 @@ const ReviewDialog = ({
 
   return (
     <dialog ref={dialog} onMouseDown={handleClick}>
+      {/* Server Action reads the form fields and writes the review to Firestore. */}
       <form
         action={handleReviewFormSubmission}
         onSubmit={() => {
@@ -44,6 +45,7 @@ const ReviewDialog = ({
           <h3>Add your review</h3>
         </header>
         <article>
+          {/* Star rating control. It writes a hidden "rating" field into this form. */}
           <RatingPicker />
 
           <p>
@@ -58,6 +60,7 @@ const ReviewDialog = ({
             />
           </p>
 
+          {/* Sent with the form so the server action knows which restaurant and user to save. */}
           <input type="hidden" name="restaurantId" value={id} />
           <input type="hidden" name="userId" value={userId} />
         </article>

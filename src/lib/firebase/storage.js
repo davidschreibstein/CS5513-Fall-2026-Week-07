@@ -10,26 +10,26 @@ export async function updateRestaurantImage(restaurantId, image) {
       if (!restaurantId) {
         throw new Error("No restaurant ID has been provided.");
       }
-  
+
       if (!image || !image.name) {
         throw new Error("A valid image has not been provided.");
       }
-  
+
       const publicImageUrl = await uploadImage(restaurantId, image);
+      // Save the URL on the Firestore restaurant so the page can display it.
       await updateRestaurantImageReference(restaurantId, publicImageUrl);
-  
+
       return publicImageUrl;
     } catch (error) {
       console.error("Error processing request:", error);
     }
   }
-  
+
   // Saves the file under images/{restaurantId}/ and returns a download URL.
   async function uploadImage(restaurantId, image) {
     const filePath = `images/${restaurantId}/${image.name}`;
     const newImageRef = ref(storage, filePath);
     await uploadBytesResumable(newImageRef, image);
-  
+
     return await getDownloadURL(newImageRef);
   }
-  

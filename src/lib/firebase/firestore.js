@@ -18,6 +18,7 @@ import {
 
 import { db } from "@/src/lib/firebase/clientApp";
 
+// Writes the public download URL onto the restaurant's photo field.
 export async function updateRestaurantImageReference(
   restaurantId,
   publicImageUrl
@@ -28,6 +29,7 @@ export async function updateRestaurantImageReference(
   }
 }
 
+// Updates the restaurant's rating totals and saves the new review in one transaction.
 const updateWithRating = async (
   transaction,
   docRef,
@@ -52,6 +54,7 @@ const updateWithRating = async (
   });
 };
 
+// Adds a review and recalculates avgRating. Both writes succeed or neither does.
 export async function addReviewToRestaurant(db, restaurantId, review) {
   if (!restaurantId) {
     throw new Error("No restaurant ID has been provided.");
@@ -80,7 +83,7 @@ export async function addReviewToRestaurant(db, restaurantId, review) {
   }
 }
 
-
+// Adds category, city, price, and sort constraints to a restaurants query.
 function applyQueryFilters(q, { category, city, price, sort }) {
   if (category) {
     q = query(q, where("category", "==", category));
@@ -88,6 +91,7 @@ function applyQueryFilters(q, { category, city, price, sort }) {
   if (city) {
     q = query(q, where("city", "==", city));
   }
+  // Price is stored as a number. The filter value is a string of "$" characters.
   if (price) {
     q = query(q, where("price", "==", price.length));
   }
@@ -99,6 +103,7 @@ function applyQueryFilters(q, { category, city, price, sort }) {
   return q;
 }
 
+// One-time read of restaurants matching the listing filters.
 export async function getRestaurants(db = db, filters = {}) {
   let q = query(collection(db, "restaurants"));
 
@@ -114,7 +119,7 @@ export async function getRestaurants(db = db, filters = {}) {
   });
 }
 
-
+// Live listener for the restaurant list. Returns the unsubscribe function.
 export function getRestaurantsSnapshot(cb, filters = {}) {
   if (typeof cb !== "function") {
     console.log("Error: The callback parameter is not a function");
@@ -138,7 +143,7 @@ export function getRestaurantsSnapshot(cb, filters = {}) {
   });
 }
 
-
+// Loads a single restaurant document by id.
 export async function getRestaurantById(db, restaurantId) {
   if (!restaurantId) {
     console.log("Error: Invalid ID received: ", restaurantId);
@@ -152,6 +157,7 @@ export async function getRestaurantById(db, restaurantId) {
   };
 }
 
+// Live listener for one restaurant. Calls cb whenever that document changes.
 export function getRestaurantSnapshotById(restaurantId, cb) {
   if (!restaurantId) {
     console.log("Error: Invalid ID received: ", restaurantId);
@@ -172,7 +178,7 @@ export function getRestaurantSnapshotById(restaurantId, cb) {
   });
 }
 
-
+// One-time read of a restaurant's ratings, newest first.
 export async function getReviewsByRestaurantId(db, restaurantId) {
   if (!restaurantId) {
     console.log("Error: Invalid restaurantId received: ", restaurantId);
@@ -195,6 +201,7 @@ export async function getReviewsByRestaurantId(db, restaurantId) {
   });
 }
 
+// Live listener for a restaurant's ratings subcollection.
 export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
   if (!restaurantId) {
     console.log("Error: Invalid restaurantId received: ", restaurantId);
@@ -218,6 +225,7 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
   });
 }
 
+// Inserts generated sample restaurants and a ratings subcollection for each one.
 export async function addFakeRestaurantsAndReviews() {
   const data = await generateFakeRestaurantsAndReviews();
   for (const { restaurantData, ratingsData } of data) {
