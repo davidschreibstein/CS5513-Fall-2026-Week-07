@@ -1,4 +1,4 @@
-import { googleAI } from "@genkit-ai/google-genai";
+import { vertexAI } from "@genkit-ai/google-genai";
 import { genkit } from "genkit";
 import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
@@ -23,18 +23,11 @@ export async function GeminiSummary({ restaurantId }) {
   `;
 
   try {
-    if (!process.env.GEMINI_API_KEY) {
-      // Make sure GEMINI_API_KEY environment variable is set:
-      // https://genkit.dev/docs/get-started/
-      throw new Error(
-        'GEMINI_API_KEY not set. Set it with "firebase apphosting:secrets:set GEMINI_API_KEY"'
-      );
-    }
-
-    // gemini-2.0-flash was shut down on June 1, 2026.
+    // Vertex AI uses the App Hosting service account (ADC). No Gemini API key is needed.
+    // Enable the Vertex AI API on the Firebase/GCP project and make sure billing is on.
     const ai = genkit({
-      plugins: [googleAI()],
-      model: googleAI.model("gemini-3.5-flash"),
+      plugins: [vertexAI({ location: "us-central1" })],
+      model: vertexAI.model("gemini-3.5-flash"),
     });
     const { text } = await ai.generate(prompt);
 
