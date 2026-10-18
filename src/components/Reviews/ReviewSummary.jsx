@@ -24,9 +24,9 @@ export async function GeminiSummary({ restaurantId }) {
 
   try {
     // Vertex AI uses the App Hosting service account (ADC). No Gemini API key is needed.
-    // Enable the Vertex AI API on the Firebase/GCP project and make sure billing is on.
+    // gemini-3.5-flash is served from the global endpoint, not regional ones like us-central1.
     const ai = genkit({
-      plugins: [vertexAI({ location: "us-central1" })],
+      plugins: [vertexAI({ location: "global" })],
       model: vertexAI.model("gemini-3.5-flash"),
     });
     const { text } = await ai.generate(prompt);
